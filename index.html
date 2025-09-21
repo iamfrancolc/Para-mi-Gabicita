@@ -200,10 +200,6 @@
         .t1 .stem { height: 35vh; } .t2 .stem { height: 45vh; } .t3 .stem { height: 40vh; }
         .t4 .stem { height: 30vh; } .t5 .stem { height: 42vh; } .t6 .stem { height: 33vh; }
         
-        /* Corazones eliminados */
-        /* .heart { position: absolute; pointer-events: none; z-index: 5; font-size: 24px; color: red; animation: float-up 5s linear forwards; }
-        @keyframes float-up { to { bottom: 110vh; opacity: 0; transform: translateX(var(--x-drift, 0)); } } */
-        
         .butterfly { position: absolute; pointer-events: none; z-index: 30; }
         .butterfly-wing { position: absolute; width: 25px; height: 35px; background: var(--butterfly-color); border-radius: 50% 50% 0 50%; opacity: 0.9; animation: flutter 0.3s infinite alternate; }
         .butterfly-wing.left { transform: translateX(-15px) rotate(-30deg); }
@@ -218,7 +214,7 @@
         .shooting-star { 
             position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; 
             box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.7); opacity: 0; z-index: 1; 
-            animation: shoot-star 2s linear forwards; /* Animación más rápida para aparecer cada 1 segundo */
+            animation: shoot-star 2s linear forwards; 
         }
         @keyframes shoot-star { 
             0% { transform: translate(var(--start-x), var(--start-y)) scale(0.5); opacity: 0; } 
@@ -231,13 +227,13 @@
 
         .main-message {
             position: absolute; 
-            top: 5%; /* Ajustado para subir el texto */
+            top: 5%; 
             left: 50%; 
             transform: translateX(-50%); 
             color: white;
             font-family: 'Playfair Display', serif; 
-            font-size: 1.3em; /* Tamaño de fuente reducido */
-            line-height: 1.4; /* Espaciado entre líneas ajustado */
+            font-size: 1.3em; 
+            line-height: 1.4; 
             text-align: center;
             text-shadow: 0 0 10px var(--aura-color), 0 0 20px rgba(255, 255, 255, 0.5); 
             z-index: 25; 
@@ -282,7 +278,7 @@
             border-radius: 50%;
             opacity: 0;
             animation: firework-rise 3s ease-out forwards;
-            z-index: 50; /* Para que estén por encima de todo lo demás */
+            z-index: 60; /* Asegurar que esté encima */
             filter: blur(0.5px);
         }
 
@@ -306,21 +302,21 @@
 
         .firework::before {
             background-color: var(--firework-color-1, yellow);
-            transform: translateX(-50%) translateY(-50%) scale(0);
+            transform: translate(-50%, -50%) scale(0); /* Ajuste de transform para centrar */
         }
         .firework::after {
             background-color: var(--firework-color-2, orange);
-            transform: translateX(-50%) translateY(-50%) scale(0);
+            transform: translate(-50%, -50%) scale(0); /* Ajuste de transform para centrar */
         }
 
         @keyframes firework-burst {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; } /* Ajuste de transform para centrar */
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } /* Ajuste de transform para centrar */
         }
         
         @media (max-width: 768px) {
             .initial-prompt h1 { font-size: 2.2em; margin-bottom: 20px; }
-            .main-message { font-size: 1em; top: 3%; line-height: 1.3; } /* Ajuste adicional para móvil */
+            .main-message { font-size: 1em; top: 3%; line-height: 1.3; } 
             .tulip-head { width: 50px; height: 70px; }
             .tulip-petal { width: 25px; height: 60px; }
             .stem { width: 6px; }
@@ -368,7 +364,8 @@
         const playIcon = document.getElementById('play-icon');
         const pauseIcon = document.getElementById('pause-icon');
         
-        const fullMessage = "Aunque miles de kilómetros nos separen, quería enviarte un pedacito de la primavera que pronto viviremos juntos.<br>Cada tulipán es un besito que te envío hasta que pueda dártelos en persona.<br>Feliz inicio de la primavera, mi vida.<br>Te quiero y te extraño más de lo que imaginas.";
+        // MENSAJE EDITADO AQUÍ
+        const fullMessage = "Aunque cientos de kilómetros nos separen, quería enviarte un pedacito de la primavera que pronto viviremos juntos.<br>Cada tulipán es un besito que te envío hasta que pueda dártelos en persona.<br>Feliz inicio de la primavera, mi vida.<br>Te quiero y te extraño más de lo que imaginas.";
 
         initialPrompt.addEventListener('click', () => {
             document.body.classList.add('started');
@@ -389,9 +386,8 @@
 
             for (let i = 1; i <= 6; i++) { createTulip(i); }
             createTwinklingStars(15);
-            // setInterval(createHeart, 400); // Corazones eliminados
-            setInterval(createShootingStar, 1000); // Estrellas fugaces cada 1 segundo
-            setInterval(createFirework, 5000); // Fuegos artificiales cada 5 segundos
+            setInterval(createShootingStar, 1000); 
+            setInterval(createFirework, 5000); 
             setTimeout(typewriterEffect, 2000);
         });
 
@@ -472,19 +468,6 @@
             mainScene.appendChild(butterfly);
             setTimeout(() => butterfly.remove(), 8000);
         }
-
-        // Corazones eliminados
-        /* function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '❤️';
-            heart.style.left = `${Math.random() * 100}vw`;
-            heart.style.bottom = '-30px';
-            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
-            heart.style.setProperty('--x-drift', `${(Math.random() - 0.5) * 150}px`);
-            mainScene.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-        } */
         
         function createShootingStar() {
             const star = document.createElement('div');
@@ -499,27 +482,26 @@
             star.style.setProperty('--shoot-y', `${startY + (endY - startY) / 3}px`);
             star.style.setProperty('--end-x', `${endX}px`);
             star.style.setProperty('--end-y', `${endY}px`);
-            star.style.animationDuration = `${Math.random() * 1 + 2}s`; // Más rápida
+            star.style.animationDuration = `${Math.random() * 1 + 2}s`; 
             mainScene.appendChild(star);
-            setTimeout(() => star.remove(), 2500); // Quita la estrella después de su animación
+            setTimeout(() => star.remove(), 2500); 
         }
 
-        // Función para crear fuegos artificiales
         const fireworkColors = ['#FFD700', '#FF4500', '#DA70D6', '#00BFFF', '#7FFF00', '#FF69B4'];
         function createFirework() {
             const firework = document.createElement('div');
             firework.className = 'firework';
             
             const startX = Math.random() * window.innerWidth;
-            const startY = window.innerHeight * 0.9; // Empieza desde abajo
-            const peakX = startX + (Math.random() - 0.5) * 200; // Un poco de variación lateral
-            const peakY = Math.random() * window.innerHeight * 0.3; // Sube hasta el tercio superior de la pantalla
-            const endX = peakX + (Math.random() - 0.5) * 100; // Caída final dispersa
-            const endY = peakY + (Math.random() * 100 + 50); // Caída un poco hacia abajo
+            const startY = window.innerHeight * 0.9; 
+            const peakX = startX + (Math.random() - 0.5) * 200; 
+            const peakY = Math.random() * window.innerHeight * 0.3; 
+            const endX = peakX + (Math.random() - 0.5) * 100; 
+            const endY = peakY + (Math.random() * 100 + 50); 
 
             const color1 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
             let color2 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
-            while (color1 === color2) { // Asegura que el segundo color sea diferente
+            while (color1 === color2) { 
                 color2 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
             }
 
@@ -533,7 +515,7 @@
             firework.style.setProperty('--firework-color-2', color2);
 
             mainScene.appendChild(firework);
-            setTimeout(() => firework.remove(), 4000); // Remueve el firework después de su animación
+            setTimeout(() => firework.remove(), 4000); 
         }
 
     </script>
