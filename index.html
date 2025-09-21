@@ -100,7 +100,6 @@
 
         .scene { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-end; z-index: 10; }
         
-        /* --- CÓDIGO CORREGIDO Y MEJORADO --- */
         .field {
             position: absolute;
             bottom: 0;
@@ -111,7 +110,6 @@
             z-index: 15; /* Detrás de las flores (20) pero delante de corazones y estrellas (5, 2, 1) */
         }
         
-        /* Efecto de colina curva en la parte superior del pasto */
         .field::before {
             content: '';
             position: absolute;
@@ -202,8 +200,9 @@
         .t1 .stem { height: 35vh; } .t2 .stem { height: 45vh; } .t3 .stem { height: 40vh; }
         .t4 .stem { height: 30vh; } .t5 .stem { height: 42vh; } .t6 .stem { height: 33vh; }
         
-        .heart { position: absolute; pointer-events: none; z-index: 5; font-size: 24px; color: red; animation: float-up 5s linear forwards; }
-        @keyframes float-up { to { bottom: 110vh; opacity: 0; transform: translateX(var(--x-drift, 0)); } }
+        /* Corazones eliminados */
+        /* .heart { position: absolute; pointer-events: none; z-index: 5; font-size: 24px; color: red; animation: float-up 5s linear forwards; }
+        @keyframes float-up { to { bottom: 110vh; opacity: 0; transform: translateX(var(--x-drift, 0)); } } */
         
         .butterfly { position: absolute; pointer-events: none; z-index: 30; }
         .butterfly-wing { position: absolute; width: 25px; height: 35px; background: var(--butterfly-color); border-radius: 50% 50% 0 50%; opacity: 0.9; animation: flutter 0.3s infinite alternate; }
@@ -216,17 +215,35 @@
         }
         @keyframes flutter { to { transform-origin: top; transform: scaleY(0.8); } }
 
-        .shooting-star { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.7); opacity: 0; animation: shoot-star 5s linear infinite; z-index: 1; }
-        @keyframes shoot-star { 0% { transform: translate(var(--start-x), var(--start-y)) scale(0.5); opacity: 0; } 10% { opacity: 1; transform: translate(var(--shoot-x), var(--shoot-y)) scale(1); } 20% { opacity: 0; transform: translate(var(--end-x), var(--end-y)) scale(0.5); } 100% { opacity: 0; } }
+        .shooting-star { 
+            position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; 
+            box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.7); opacity: 0; z-index: 1; 
+            animation: shoot-star 2s linear forwards; /* Animación más rápida para aparecer cada 1 segundo */
+        }
+        @keyframes shoot-star { 
+            0% { transform: translate(var(--start-x), var(--start-y)) scale(0.5); opacity: 0; } 
+            20% { opacity: 1; transform: translate(var(--shoot-x), var(--shoot-y)) scale(1); } 
+            100% { opacity: 0; transform: translate(var(--end-x), var(--end-y)) scale(0.5); } 
+        }
 
         .twinkling-star { position: absolute; width: 3px; height: 3px; background-color: white; border-radius: 50%; box-shadow: 0 0 8px 2px var(--aura-color); animation: twinkle 4s ease-in-out infinite; z-index: 2; }
         @keyframes twinkle { 0%, 100% { opacity: 0.5; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
         .main-message {
-            position: absolute; top: 10%; left: 50%; transform: translateX(-50%); color: white;
-            font-family: 'Playfair Display', serif; font-size: 1.6em; line-height: 1.5; text-align: center;
-            text-shadow: 0 0 10px var(--aura-color), 0 0 20px rgba(255, 255, 255, 0.5); z-index: 25; width: 90%;
-            max-width: 600px; opacity: 0;
+            position: absolute; 
+            top: 5%; /* Ajustado para subir el texto */
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: white;
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.3em; /* Tamaño de fuente reducido */
+            line-height: 1.4; /* Espaciado entre líneas ajustado */
+            text-align: center;
+            text-shadow: 0 0 10px var(--aura-color), 0 0 20px rgba(255, 255, 255, 0.5); 
+            z-index: 25; 
+            width: 90%;
+            max-width: 600px; 
+            opacity: 0;
         }
         
         .audio-control {
@@ -255,10 +272,55 @@
             fill: white;
         }
         #pause-icon { display: none; }
+
+        /* Estilos para fuegos artificiales */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: radial-gradient(white 0%, rgba(255,255,255,0.7) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework-rise 3s ease-out forwards;
+            z-index: 50; /* Para que estén por encima de todo lo demás */
+            filter: blur(0.5px);
+        }
+
+        @keyframes firework-rise {
+            0% { transform: translate(var(--start-x), var(--start-y)) scale(0.2); opacity: 0; }
+            50% { transform: translate(var(--peak-x), var(--peak-y)) scale(1); opacity: 1; }
+            100% { transform: translate(var(--end-x), var(--end-y)) scale(0); opacity: 0; }
+        }
+
+        .firework::before, .firework::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            animation: firework-burst 0.8s ease-out forwards 2.5s; /* Retraso para explotar después de subir */
+            filter: blur(1px);
+        }
+
+        .firework::before {
+            background-color: var(--firework-color-1, yellow);
+            transform: translateX(-50%) translateY(-50%) scale(0);
+        }
+        .firework::after {
+            background-color: var(--firework-color-2, orange);
+            transform: translateX(-50%) translateY(-50%) scale(0);
+        }
+
+        @keyframes firework-burst {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
         
         @media (max-width: 768px) {
             .initial-prompt h1 { font-size: 2.2em; margin-bottom: 20px; }
-            .main-message { font-size: 1.1em; top: 5%; }
+            .main-message { font-size: 1em; top: 3%; line-height: 1.3; } /* Ajuste adicional para móvil */
             .tulip-head { width: 50px; height: 70px; }
             .tulip-petal { width: 25px; height: 60px; }
             .stem { width: 6px; }
@@ -313,13 +375,11 @@
             initialPrompt.classList.add('hidden');
             bushSound.play();
 
-            // --- CÓDIGO CON DETECTOR DE ERRORES PARA LA MÚSICA ---
             let playPromise = backgroundSong.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.error("Error al reproducir la canción:", error);
                     alert("Tu navegador bloqueó la reproducción automática de la canción.\n\nPor favor, haz clic en el ícono de música en la esquina superior derecha para iniciarla.");
-                    // No mostramos el ícono de pausa si falla
                     playIcon.style.display = 'block';
                     pauseIcon.style.display = 'none';
                 });
@@ -329,8 +389,9 @@
 
             for (let i = 1; i <= 6; i++) { createTulip(i); }
             createTwinklingStars(15);
-            setInterval(createHeart, 400);
-            setInterval(createShootingStar, 4500);
+            // setInterval(createHeart, 400); // Corazones eliminados
+            setInterval(createShootingStar, 1000); // Estrellas fugaces cada 1 segundo
+            setInterval(createFirework, 5000); // Fuegos artificiales cada 5 segundos
             setTimeout(typewriterEffect, 2000);
         });
 
@@ -385,7 +446,7 @@
                 const star = document.createElement('div');
                 star.className = 'twinkling-star';
                 star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 80}%`; // Evita que se creen estrellas en la zona del pasto
+                star.style.top = `${Math.random() * 80}%`;
                 star.style.animationDelay = `${Math.random() * 4}s`;
                 star.style.animationDuration = `${Math.random() * 2 + 3}s`;
                 mainScene.appendChild(star);
@@ -412,7 +473,8 @@
             setTimeout(() => butterfly.remove(), 8000);
         }
 
-        function createHeart() {
+        // Corazones eliminados
+        /* function createHeart() {
             const heart = document.createElement('div');
             heart.className = 'heart';
             heart.innerHTML = '❤️';
@@ -422,7 +484,7 @@
             heart.style.setProperty('--x-drift', `${(Math.random() - 0.5) * 150}px`);
             mainScene.appendChild(heart);
             setTimeout(() => heart.remove(), 5000);
-        }
+        } */
         
         function createShootingStar() {
             const star = document.createElement('div');
@@ -437,10 +499,43 @@
             star.style.setProperty('--shoot-y', `${startY + (endY - startY) / 3}px`);
             star.style.setProperty('--end-x', `${endX}px`);
             star.style.setProperty('--end-y', `${endY}px`);
-            star.style.animationDuration = `${Math.random() * 2 + 4}s`;
+            star.style.animationDuration = `${Math.random() * 1 + 2}s`; // Más rápida
             mainScene.appendChild(star);
-            setTimeout(() => star.remove(), 6000);
+            setTimeout(() => star.remove(), 2500); // Quita la estrella después de su animación
         }
+
+        // Función para crear fuegos artificiales
+        const fireworkColors = ['#FFD700', '#FF4500', '#DA70D6', '#00BFFF', '#7FFF00', '#FF69B4'];
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight * 0.9; // Empieza desde abajo
+            const peakX = startX + (Math.random() - 0.5) * 200; // Un poco de variación lateral
+            const peakY = Math.random() * window.innerHeight * 0.3; // Sube hasta el tercio superior de la pantalla
+            const endX = peakX + (Math.random() - 0.5) * 100; // Caída final dispersa
+            const endY = peakY + (Math.random() * 100 + 50); // Caída un poco hacia abajo
+
+            const color1 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            let color2 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            while (color1 === color2) { // Asegura que el segundo color sea diferente
+                color2 = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+            }
+
+            firework.style.setProperty('--start-x', `${startX}px`);
+            firework.style.setProperty('--start-y', `${startY}px`);
+            firework.style.setProperty('--peak-x', `${peakX}px`);
+            firework.style.setProperty('--peak-y', `${peakY}px`);
+            firework.style.setProperty('--end-x', `${endX}px`);
+            firework.style.setProperty('--end-y', `${endY}px`);
+            firework.style.setProperty('--firework-color-1', color1);
+            firework.style.setProperty('--firework-color-2', color2);
+
+            mainScene.appendChild(firework);
+            setTimeout(() => firework.remove(), 4000); // Remueve el firework después de su animación
+        }
+
     </script>
 </body>
 </html>
