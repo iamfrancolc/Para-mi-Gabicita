@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Sorpresa de Primavera Para Ti</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdeef4;
+            --primary-green: #4C9A2A;
+            --field-green-dark: #285430;
+            --field-green-light: #5F8D4E;
+            --tulip-color: #FFD700;
+            --tulip-accent-color: #FFBF00;
+            --aura-color: #FFFACD;
+            --text-color: #8B0000;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-color);
+            transition: background-color 1.5s ease;
+        }
+        
+        body.started {
+            background-color: #0f0c29;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 40px 70px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 80px 10px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 110px 50px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 150px 20px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 180px 60px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 200px 80px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 230px 40px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 260px 90px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 290px 20px, #ddd, rgba(0,0,0,0));
+            background-size: 300px 300px;
+            animation: move-stars 100s linear infinite;
+        }
+
+        @keyframes move-stars {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 500px; }
+        }
+
+        .initial-prompt {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 1000;
+            position: absolute;
+            background-color: var(--bg-color);
+            transition: opacity 1s ease;
+        }
+
+        .initial-prompt h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--text-color);
+            animation: pulse 2.5s infinite ease-in-out;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .arrow {
+            font-size: 3em;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            animation: bounce 1.5s infinite;
+        }
+
+        .photo-frame {
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 3px;
+            transform: rotate(-3deg);
+            width: 250px;
+            max-width: 60vw;
+        }
+
+        .photo-frame img { max-width: 100%; height: auto; display: block; border: 1px solid #eee; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.03); opacity: 1; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hidden { opacity: 0; pointer-events: none; }
+
+        .scene { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-end; z-index: 10; }
+        .field { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: flex-end; z-index: 10; }
+
+        .flower-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 4vw;
+            position: absolute;
+            bottom: 0;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 2.5s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 20;
+        }
+
+        body.started .flower-container { transform: translateY(0); opacity: 1; }
+        
+        .tulip {
+            position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer;
+            transition: transform 0.3s ease; filter: drop-shadow(0 0 15px var(--aura-color));
+        }
+        .tulip:hover { transform: scale(1.05); }
+        
+        .tulip-head {
+            width: 80px;
+            height: 100px;
+            position: relative;
+            z-index: 20;
+            animation-name: head-bob;
+            animation-duration: 8s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        .tulip-petal {
+            position: absolute; bottom: 0; left: 50%; width: 40px; height: 90px;
+            background: var(--tulip-color); border-radius: 50% 50% 0 0; transform-origin: bottom center;
+        }
+        .tulip-petal.p1 { transform: translateX(-50%) rotate(-15deg); z-index: 1; background: var(--tulip-accent-color); }
+        .tulip-petal.p2 { transform: translateX(-50%) rotate(0deg); z-index: 2; }
+        .tulip-petal.p3 { transform: translateX(-50%) rotate(15deg); z-index: 1; background: var(--tulip-accent-color); }
+
+        .stem {
+            width: 8px; background: linear-gradient(to right, var(--primary-green), #6B8E23);
+            position: relative; z-index: 10; border-radius: 5px 5px 0 0;
+            transform-origin: bottom;
+            animation-name: stem-stretch;
+            animation-duration: 8s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+        
+        .leaf {
+            position: absolute; width: 35px; height: 160px;
+            background: linear-gradient(to bottom, #5F8D4E, #3A6931);
+            border-radius: 0 100% / 0 100%;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.2);
+            transform-origin: bottom center;
+            filter: blur(0.2px);
+        }
+        .leaf.l1 { bottom: 30px; left: -18px; transform: rotate(-25deg); }
+        .leaf.l2 { bottom: 60px; right: -18px; transform: rotate(25deg) scaleX(-1); }
+
+        @keyframes head-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes stem-stretch { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.03); } }
+        
+        @keyframes grow { from { opacity: 0; transform: scaleY(0.5); } to { opacity: 1; transform: scaleY(1); } }
+        
+        .t1, .t2, .t3, .t4, .t5, .t6 { animation-name: grow; animation-duration: 2s; animation-fill-mode: forwards; }
+        .t1 { animation-delay: 1s; } .t2 { animation-delay: 0.8s; } .t3 { animation-delay: 1.2s; } .t4 { animation-delay: 1.4s; } .t5 { animation-delay: 0.6s; } .t6 { animation-delay: 1.6s; }
+        
+        .t1 .tulip-head, .t1 .stem { animation-delay: 1s; }
+        .t2 .tulip-head, .t2 .stem { animation-delay: 0.2s; }
+        .t3 .tulip-head, .t3 .stem { animation-delay: 1.5s; }
+        .t4 .tulip-head, .t4 .stem { animation-delay: 0.8s; }
+        .t5 .tulip-head, .t5 .stem { animation-delay: 2s; }
+        .t6 .tulip-head, .t6 .stem { animation-delay: 0.5s; }
+        
+        .t1 .stem { height: 35vh; } .t2 .stem { height: 45vh; } .t3 .stem { height: 40vh; }
+        .t4 .stem { height: 30vh; } .t5 .stem { height: 42vh; } .t6 .stem { height: 33vh; }
+        
+        .heart { position: absolute; pointer-events: none; z-index: 5; font-size: 24px; color: red; animation: float-up 5s linear forwards; }
+        @keyframes float-up { to { bottom: 110vh; opacity: 0; transform: translateX(var(--x-drift, 0)); } }
+        
+        .butterfly { position: absolute; pointer-events: none; z-index: 30; }
+        .butterfly-wing { position: absolute; width: 25px; height: 35px; background: var(--butterfly-color); border-radius: 50% 50% 0 50%; opacity: 0.9; animation: flutter 0.3s infinite alternate; }
+        .butterfly-wing.left { transform: translateX(-15px) rotate(-30deg); }
+        .butterfly-wing.right { transform: translateX(15px) rotate(30deg) scaleX(-1); }
+        @keyframes fly {
+            0% { opacity: 0; transform: scale(0.5); }
+            20% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: translate(var(--end-x), var(--end-y)) scale(0.5); }
+        }
+        @keyframes flutter { to { transform-origin: top; transform: scaleY(0.8); } }
+
+        .shooting-star { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.7); opacity: 0; animation: shoot-star 5s linear infinite; z-index: 1; }
+        @keyframes shoot-star { 0% { transform: translate(var(--start-x), var(--start-y)) scale(0.5); opacity: 0; } 10% { opacity: 1; transform: translate(var(--shoot-x), var(--shoot-y)) scale(1); } 20% { opacity: 0; transform: translate(var(--end-x), var(--end-y)) scale(0.5); } 100% { opacity: 0; } }
+
+        .twinkling-star { position: absolute; width: 3px; height: 3px; background-color: white; border-radius: 50%; box-shadow: 0 0 8px 2px var(--aura-color); animation: twinkle 4s ease-in-out infinite; z-index: 2; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.5; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+        .main-message {
+            position: absolute; top: 10%; left: 50%; transform: translateX(-50%); color: white;
+            font-family: 'Playfair Display', serif; font-size: 1.6em; line-height: 1.5; text-align: center;
+            text-shadow: 0 0 10px var(--aura-color), 0 0 20px rgba(255, 255, 255, 0.5); z-index: 25; width: 90%;
+            max-width: 600px; opacity: 0;
+        }
+        
+        .audio-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s 2s;
+        }
+        body.started .audio-control {
+            opacity: 1;
+        }
+        .audio-control svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        #pause-icon { display: none; }
+        
+        @media (max-width: 768px) {
+            .initial-prompt h1 { font-size: 2.2em; margin-bottom: 20px; }
+            .main-message { font-size: 1.1em; top: 5%; }
+            .tulip-head { width: 50px; height: 70px; }
+            .tulip-petal { width: 25px; height: 60px; }
+            .stem { width: 6px; }
+            .leaf { width: 25px; height: 120px; bottom: 15px; }
+            .leaf.l1 { left: -12px; } .leaf.l2 { right: -12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="initial-prompt" id="initialPrompt">
+        <h1>Haz Click Aquí Preciosa</h1>
+        <span class="arrow">⬇</span>
+        <div class="photo-frame">
+            <img src="bebes.png" alt="Mis amores"> 
+        </div>
+    </div>
+    
+    <div class="scene" id="mainScene">
+        <div class="main-message" id="mainMessage"></div>
+        <div class="field"></div>
+        <div class="flower-container" id="flowerContainer"></div>
+        
+        <div class="audio-control" id="audioControl">
+            <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </div>
+    </div>
+    
+    <audio id="bush-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-small-branch-break-2292.mp3" preload="auto"></audio>
+    
+    <audio id="background-song" loop>
+        <source src="cancion.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+
+    <script>
+        const initialPrompt = document.getElementById('initialPrompt');
+        const mainScene = document.getElementById('mainScene');
+        const flowerContainer = document.getElementById('flowerContainer');
+        const bushSound = document.getElementById('bush-sound');
+        const mainMessage = document.getElementById('mainMessage');
+        const backgroundSong = document.getElementById('background-song');
+        const audioControl = document.getElementById('audioControl');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        
+        const fullMessage = "Aunque miles de kilómetros nos separen, quería enviarte un pedacito de la primavera que pronto viviremos juntos.<br>Cada tulipán es un besito que te envío hasta que pueda dártelos en persona.<br>Feliz inicio de la primavera, mi vida.<br>Te quiero y te extraño más de lo que imaginas.";
+
+        initialPrompt.addEventListener('click', () => {
+            document.body.classList.add('started');
+            initialPrompt.classList.add('hidden');
+            bushSound.play();
+
+            // --- CÓDIGO CON DETECTOR DE ERRORES PARA LA MÚSICA ---
+            let playPromise = backgroundSong.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error("Error al reproducir la canción:", error);
+                    alert("Tu navegador bloqueó la reproducción automática de la canción.\n\nPor favor, haz clic en el ícono de música en la esquina superior derecha para iniciarla.");
+                    // No mostramos el ícono de pausa si falla
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                });
+            }
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+
+            for (let i = 1; i <= 6; i++) { createTulip(i); }
+            createTwinklingStars(15);
+            setInterval(createHeart, 400);
+            setInterval(createShootingStar, 4500);
+            setTimeout(typewriterEffect, 2000);
+        });
+
+        audioControl.addEventListener('click', () => {
+            if (backgroundSong.paused) {
+                backgroundSong.play();
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                backgroundSong.pause();
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        });
+
+        function typewriterEffect() {
+            mainMessage.style.opacity = 1;
+            let i = 0;
+            const textArray = fullMessage.split('');
+            function type() {
+                if (i < textArray.length) {
+                    if(textArray[i] === '<') {
+                        mainMessage.innerHTML += textArray.slice(i, i + 4).join('');
+                        i += 4;
+                    } else {
+                        mainMessage.innerHTML += textArray[i];
+                        i++;
+                    }
+                    setTimeout(type, 60);
+                }
+            }
+            type();
+        }
+
+        function createTulip(index) {
+            const tulip = document.createElement('div');
+            tulip.className = `tulip t${index}`;
+            tulip.innerHTML = `<div class="tulip-head"><div class="tulip-petal p1"></div><div class="tulip-petal p2"></div><div class="tulip-petal p3"></div></div><div class="stem"><div class="leaf l1"></div><div class="leaf l2"></div></div>`;
+            tulip.addEventListener('click', (event) => {
+                const rect = event.currentTarget.getBoundingClientRect();
+                const clickX = rect.left + rect.width / 2;
+                const clickY = rect.top;
+                for(let i=0; i<3; i++) { createButterfly(clickX, clickY); }
+                bushSound.currentTime = 0;
+                bushSound.play();
+            });
+            flowerContainer.appendChild(tulip);
+        }
+
+        function createTwinklingStars(count) {
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'twinkling-star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 80}%`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                star.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                mainScene.appendChild(star);
+            }
+        }
+
+        const butterflyColors = ['#E40078', '#FF5722', '#F44336', '#9C27B0', '#2196F3', '#00BCD4', '#8BC34A'];
+        function createButterfly(x, y) {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'butterfly';
+            const color = butterflyColors[Math.floor(Math.random() * butterflyColors.length)];
+            butterfly.innerHTML = `<div class="butterfly-wing left"></div><div class="butterfly-wing right"></div>`;
+            butterfly.style.setProperty('--butterfly-color', color);
+            butterfly.style.left = `${x}px`;
+            butterfly.style.top = `${y}px`;
+            const endX = (Math.random() - 0.5) * window.innerWidth * 1.5;
+            const endY = (Math.random() - 0.5) * window.innerHeight * 1.5;
+            butterfly.style.setProperty('--end-x', `${endX}px`);
+            butterfly.style.setProperty('--end-y', `${endY}px`);
+            butterfly.style.animationName = 'fly';
+            butterfly.style.animationDuration = `${Math.random() * 3 + 5}s`;
+            butterfly.style.animationTimingFunction = 'ease-in-out';
+            mainScene.appendChild(butterfly);
+            setTimeout(() => butterfly.remove(), 8000);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.bottom = '-30px';
+            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+            heart.style.setProperty('--x-drift', `${(Math.random() - 0.5) * 150}px`);
+            mainScene.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            const startX = Math.random() * window.innerWidth * 1.5 - window.innerWidth * 0.25;
+            const startY = Math.random() * window.innerHeight * 0.3;
+            const endX = startX + (Math.random() * 500 + 300) * (Math.random() > 0.5 ? 1 : -1);
+            const endY = startY + (Math.random() * 300 + 100);
+            star.style.setProperty('--start-x', `${startX}px`);
+            star.style.setProperty('--start-y', `${startY}px`);
+            star.style.setProperty('--shoot-x', `${startX + (endX - startX) / 3}px`);
+            star.style.setProperty('--shoot-y', `${startY + (endY - startY) / 3}px`);
+            star.style.setProperty('--end-x', `${endX}px`);
+            star.style.setProperty('--end-y', `${endY}px`);
+            star.style.animationDuration = `${Math.random() * 2 + 4}s`;
+            mainScene.appendChild(star);
+            setTimeout(() => star.remove(), 6000);
+        }
+    </script>
+</body>
+</html>
